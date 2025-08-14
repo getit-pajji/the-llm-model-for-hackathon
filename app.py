@@ -241,4 +241,73 @@ with st.container():
         df = pd.DataFrame(list(st.session_state.data_points))
         base = alt.Chart(df).encode(x=alt.X('time:T', title='Time', axis=alt.Axis(format='%H:%M:%S')))
         depth_line = base.mark_line(color='#42a5f5', strokeWidth=3).encode(
-            y=alt.Y('depth:Q', title='Depth (m)', sca
+            y=alt.Y('depth:Q', title='Depth (m)', scale=alt.Scale(domain=(df['depth'].min()-10, df['depth'].max()+10)))
+        )
+        temp_line = base.mark_line(color='#ff7043', strokeWidth=3).encode(
+            y=alt.Y('temperature:Q', title='Temp (°C)', scale=alt.Scale(domain=(df['temperature'].min()-2, df['temperature'].max()+2)))
+        )
+        chart = alt.layer(depth_line, temp_line).resolve_scale(y='independent').interactive()
+        st.altair_chart(chart, use_container_width=True)
+
+    # --- LIVE FEED & CONTROL PAGE ---
+    elif st.session_state.page == "Control":
+        st.header("Live Feed & ROV Control")
+        
+        col1, col2 = st.columns([3, 1])
+        
+        with col1:
+            st.subheader("Camera Feed")
+            cam_options = ["Forward Cam", "Bottom Cam", "Rear Cam"]
+            selected_cam = st.selectbox("Select Camera", cam_options)
+            
+            # Dynamic video selection based on the dropdown
+            if selected_cam == "Forward Cam":
+                st.video("https://videos.pexels.com/video-files/8065383/8065383-hd_1280_720_25fps.mp4")
+            elif selected_cam == "Bottom Cam":
+                st.video("https://videos.pexels.com/video-files/5914159/5914159-hd_1280_720_30fps.mp4")
+            else: # Rear Cam
+                st.video("https://videos.pexels.com/video-files/853801/853801-hd_1280_720_25fps.mp4")
+
+            st.caption(f"Displaying feed from: {selected_cam}")
+
+        with col2:
+            st.subheader("Manual Controls")
+            if st.button("⬆️ Forward", use_container_width=True): st.toast("Moving Forward")
+            c1, c2, c3 = st.columns(3)
+            if c1.button("⬅️ Left", use_container_width=True): st.toast("Turning Left")
+            if c2.button("⏹️ Stop", use_container_width=True): st.toast("Stopping all movement")
+            if c3.button("➡️ Right", use_container_width=True): st.toast("Turning Right")
+            if st.button("⬇️ Backward", use_container_width=True): st.toast("Moving Backward")
+            st.markdown("---")
+            c4, c5 = st.columns(2)
+            if c4.button("🔼 Ascend", use_container_width=True): st.toast("Ascending")
+            if c5.button("🔽 Descend", use_container_width=True): st.toast("Descending")
+
+    # --- AI ANALYSIS PAGE ---
+    elif st.session_state.page == "AI":
+        st.header("AI-Powered Marine Analysis")
+        
+        image_tab, sound_tab = st.tabs(["🐠 Image Recognition", "🔊 Sound Recognition"])
+
+        with image_tab:
+            st.subheader("Identify a Marine Creature")
+            uploaded_image = st.file_uploader("Choose an image", type=['png', 'jpg', 'jpeg'], key="img_uploader")
+            if uploaded_image:
+                st.image(uploaded_image, caption="Uploaded Image")
+                if st.button("Analyze Creature", use_container_width=True):
+                    with st.spinner("AquaSentry is thinking..."):
+                        analysis_result = analyze_image(uploaded_image)
+                        st.markdown(analysis_result)
+
+        with sound_tab:
+            st.subheader("Identify a Marine Sound")
+            uploaded_audio = st.file_uploader("Choose an audio file", type=['mp3', 'wav', 'm4a'], key="audio_uploader")
+            if uploaded_audio:
+                st.audio(uploaded_audio)
+                if st.button("Analyze Sound", use_container_width=True):
+                    with st.spinner("AquaSentry is listening..."):
+                        analysis_result = analyze_audio(uploaded_audio)
+                        st.success(f"**Analysis Result:** {analysis_result}")
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
