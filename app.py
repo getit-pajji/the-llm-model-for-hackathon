@@ -12,7 +12,7 @@ import random
 # --- 1. PAGE CONFIGURATION & STYLING ---
 
 st.set_page_config(
-    page_title="AquaSentry Command Center",
+    page_title="Gemini Command Center",
     page_icon="🌊",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -100,7 +100,7 @@ def set_page_background_and_style():
     </style>
     """, unsafe_allow_html=True)
 
-# --- 2. AquaSentry AI CONFIGURATION ---
+# --- 2. Gemini AI CONFIGURATION ---
 
 try:
     genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
@@ -172,7 +172,7 @@ def analyze_audio(uploaded_audio):
 # --- 5. UI: SIDEBAR NAVIGATION ---
 
 with st.sidebar:
-    st.title("🌊 AquaSentry")
+    st.title("🌊 Gemini")
     st.markdown("---")
     if st.button("Overview", use_container_width=True):
         st.session_state.page = "Overview"
@@ -192,7 +192,7 @@ with st.sidebar:
 
 set_page_background_and_style()
 
-st.title("AquaSentry Command Center")
+st.title("Gemini Command Center")
 
 # --- OVERVIEW PAGE ---
 if st.session_state.page == "Overview":
@@ -314,7 +314,7 @@ elif st.session_state.page == "AI":
         if uploaded_image:
             st.image(uploaded_image, caption="Uploaded Image")
             if st.button("Analyze Creature", use_container_width=True):
-                with st.spinner("AquaSentry is thinking..."):
+                with st.spinner("Gemini is thinking..."):
                     analysis_result = analyze_image(uploaded_image)
                     st.markdown(analysis_result)
 
@@ -324,6 +324,6 @@ elif st.session_state.page == "AI":
         if uploaded_audio:
             st.audio(uploaded_audio)
             if st.button("Analyze Sound", use_container_width=True):
-                with st.spinner("AquaSentry is listening..."):
+                with st.spinner("Gemini is listening..."):
                     analysis_result = analyze_audio(uploaded_audio)
                     st.success(f"**Analysis Result:** {analysis_result}")
