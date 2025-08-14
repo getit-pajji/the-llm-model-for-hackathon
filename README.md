@@ -19,7 +19,7 @@
     - All insights are synthesized and explained by a powerful **Gemini-based script** for a rich user experience.
 - **📊 Live Overview Dashboard**: Displays real-time (simulated) data from an underwater ROV, including depth, temperature, battery, and mission progress with live-updating charts.
 - **📹 Multi-View Camera Feeds**: A dedicated control panel to switch between different ROV camera views (Forward, Bottom, Rear) and manage manual controls.
-- **🎨 Immersive UI/UX**: Features a stunning, full-screen ocean video background with a responsive, modern interface designed for a command center feel.
+- **🎨 Immersive UI/UX**: Features a stunning, full-screen ocean background image with a responsive, modern interface designed for a command center feel.
 - **🚀 Deployable & Scalable**: Ready for deployment on Vercel, allowing you to share your application with the world.
 
 ---
@@ -88,16 +88,12 @@ Make sure you have Python 3.8+ installed on your system.
 
 ### Running Locally
 
-1.  **Download a background video:**
-    - Download a short, looping ocean video from a source like [Pexels](https://www.pexels.com/search/ocean/).
-    - Save it in the root of your project folder as `background.mp4`.
-
-2.  **Launch the application:**
+1.  **Launch the application:**
     Open your terminal in the project's root directory and run:
     ```bash
     streamlit run app.py
     ```
-    Your default web browser will open with the running application.
+    Your default web browser will open with the running application. The background image is set directly in the code.
 
 ---
 
@@ -150,10 +146,6 @@ This project is configured for easy deployment on Vercel.
 ├── .streamlit/
 │   └── secrets.toml      # Local API key storage
 ├── app.py                # Main Streamlit application script
-├── background.mp4        # (Optional) Local background video
 ├── requirements.txt      # Python dependencies
 ├── vercel.json           # Vercel deployment configuration
 └── .slugignore           # Vercel deployment ignore file
-
-
----
