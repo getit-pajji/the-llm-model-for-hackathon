@@ -132,10 +132,10 @@ def get_accurate_fish_label(uploaded_image):
 
 def analyze_image_details(fish_name):
     """
-    Analyzes a fish NAME using Gemini to get detailed information.
+    Analyzes a fish NAME using AquaSentry to get detailed information.
     This is the "generalist" model.
     """
-    st.info("Generalist Model (Gemini): Generating detailed report...")
+    st.info("Generalist Model (llama 3.2): Generating detailed report...")
     prompt = f"""
     You are a marine biologist. Provide a detailed, formatted report on the following marine creature: {fish_name}
 
