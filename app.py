@@ -121,42 +121,49 @@ if "battery" not in st.session_state:
 
 def get_accurate_fish_label(uploaded_image):
     """
-    This function SIMULATES a specialist model like YOLOv8.
-    In a real-world app, this is where you would run your trained
-    computer vision model. For now, it just returns a correct label.
+    This function now uses Gemini to act as a specialist model.
+    Its only job is to identify the creature in the image accurately.
     """
-    st.info("Specialist Model (YOLOv8): Analyzing image...")
-    time.sleep(1) # Simulate processing time
-    # This is where a real model would return its finding. We'll hardcode it for the demo.
-    return "Spiny-tailed Leatherjacket"
+    st.info("Specialist AI: Identifying creature...")
+    image_object = Image.open(uploaded_image)
+    
+    # A very specific prompt asking the AI to ONLY identify the creature.
+    prompt = "Analyze the image and identify the marine creature shown. Return only the common name of the creature and nothing else."
+    
+    response = gemini_model.generate_content([prompt, image_object])
+    
+    # Clean up the response to ensure it's just the name
+    creature_name = response.text.strip()
+    return creature_name
 
 def analyze_image_details(fish_name):
     """
-    Analyzes a fish NAME using AquaSentry to get detailed information.
+    Analyzes a fish NAME using Gemini to get detailed information.
     This is the "generalist" model.
     """
-    st.info("Generalist Model (llama 3.2): Generating detailed report...")
+    st.info("Generalist AI: Generating detailed report...")
     prompt = f"""
     You are a marine biologist. Provide a detailed, formatted report on the following marine creature: {fish_name}
 
     Format your entire response using Markdown. Use headings, bullet points, and tables exactly like this example:
     
     ### Identification & Common Name
-    * The common name for *Acanthaluteres brownii* is indeed Spiny-tailed Leatherjacket.
+    * The common name for the creature is {fish_name}.
 
     ### Appearance & Habitat
-    * Males typically sport a green to yellowish-green body...
+    * Describe the typical appearance, colors, and markings.
+    * Describe the natural habitat, including geographical location and water depth.
 
     ### Scientific Classification
-    * Belonging to the family Monacanthidae...
+    * Provide the full scientific classification (Kingdom, Phylum, Class, Order, Family, Genus, Species).
 
     ### Summary Table
     | Feature            | Details                               |
     |--------------------|---------------------------------------|
-    | Scientific Name    | *Acanthaluteres brownii* |
-    | Common Name        | Spiny-tailed Leatherjacket            |
-    | Distinctive Traits | Males: greenish body; Females: muted  |
-    | Habitat            | Southern Australia; reefs & seagrass  |
+    | Scientific Name    | [Provide Scientific Name]             |
+    | Common Name        | {fish_name}                           |
+    | Distinctive Traits | [List 2-3 key visual traits]          |
+    | Habitat            | [Summarize habitat]                   |
     """
     response = gemini_model.generate_content(prompt)
     return response.text
@@ -321,7 +328,7 @@ with st.container():
                     with st.spinner("Running AI analysis..."):
                         # 1. Get the accurate label from the "specialist"
                         accurate_label = get_accurate_fish_label(uploaded_image)
-                        st.success(f"Specialist Model identified: **{accurate_label}**")
+                        st.success(f"Specialist AI identified: **{accurate_label}**")
 
                         # 2. Get the detailed report from the "generalist"
                         detailed_report = analyze_image_details(accurate_label)
@@ -344,4 +351,5 @@ with st.container():
                         st.success(f"**Analysis Result:** {analysis_result}")
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 
