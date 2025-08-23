@@ -38,7 +38,6 @@ Experience the AquaSentry Command Center live!
 
 - **Backend & Frontend**: [Python](https://www.python.org/) with [Streamlit](https://streamlit.io/)
 - **AI Models & Frameworks**:
-    - **Core Logic**: Google Gemini 1.5 Flash (via API)
     - **Object Detection**: YOLOv8
     - **Audio Classification**: YAMNet
     - **Language Model**: Llama 3.2 (90M)
